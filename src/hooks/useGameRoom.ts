@@ -1,23 +1,25 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+
 import {
+  addDoc,
+  collection,
   doc,
   getFirestore,
   onSnapshot,
-  updateDoc,
-  collection,
-  addDoc,
-  serverTimestamp,
-  query,
   orderBy,
-  Timestamp,
+  query,
+  serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
-import { getAuth, signInAnonymously, onAuthStateChanged, User } from "firebase/firebase-auth";
+import { User, getAuth, onAuthStateChanged, signInAnonymously } from "firebase/auth";
 import { Chess } from "chess.js";
-import type { Square, Color } from "chess.js";
+import type { Color, Square } from "chess.js";
+
 import { app } from "@/lib/firebase";
-import { Game, GameStatus, ChatMessage } from "@/types";
+import { ChatMessage, Game, GameStatus } from "@/types";
+
 import { useToast } from "./use-toast";
 
 const db = getFirestore(app);
@@ -31,12 +33,13 @@ export function useGameRoom(gameId: string) {
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
+  // Instance Chess dibuat ulang ketika FEN berubah agar logika langkah tetap sinkron
   const chess = useMemo(() => (game ? new Chess(game.fen) : null), [game]);
-  
+
   const playerColor: Color | null = useMemo(() => {
     if (!game || !user) return null;
-    if (game.players.w === user.uid) return 'w';
-    if (game.players.b === user.uid) return 'b';
+    if (game.players.w === user.uid) return "w";
+    if (game.players.b === user.uid) return "b";
     return null;
   }, [game, user]);
 
@@ -65,12 +68,16 @@ export function useGameRoom(gameId: string) {
         if (docSnap.exists()) {
           const gameData = { id: docSnap.id, ...docSnap.data() } as Game;
 
-          // Attempt to join the game if a slot is open
+          // Otomatis mengisi slot kosong agar pemain langsung terdaftar di papan
           if (user.uid !== gameData.players.w && user.uid !== gameData.players.b) {
             if (gameData.players.w === null) {
-              updateDoc(gameRef, { "players.w": user.uid });
+              updateDoc(gameRef, { "players.w": user.uid }).catch((joinError) => {
+                console.error("Failed to join as white:", joinError);
+              });
             } else if (gameData.players.b === null) {
-              updateDoc(gameRef, { "players.b": user.uid, status: "in_progress" });
+              updateDoc(gameRef, { "players.b": user.uid, status: "in_progress" }).catch((joinError) => {
+                console.error("Failed to join as black:", joinError);
+              });
             }
           }
           setGame(gameData);
@@ -86,30 +93,46 @@ export function useGameRoom(gameId: string) {
         setLoading(false);
       }
     );
-    
+
     const chatQuery = query(collection(db, `games/${gameId}/chat`), orderBy("timestamp", "asc"));
-    const chatUnsubscribe = onSnapshot(chatQuery, (querySnapshot) => {
+    const chatUnsubscribe = onSnapshot(
+      chatQuery,
+      (querySnapshot) => {
         const messages: ChatMessage[] = [];
-        querySnapshot.forEach((doc) => {
-            messages.push({ id: doc.id, ...doc.data() } as ChatMessage);
+        querySnapshot.forEach((chatDoc) => {
+          messages.push({ id: chatDoc.id, ...chatDoc.data() } as ChatMessage);
         });
         setChatMessages(messages);
-    });
+      },
+      (err) => {
+        console.error("Chat snapshot error:", err);
+        toast({
+          title: "Chat Error",
+          description: "Tidak dapat memuat pesan obrolan.",
+          variant: "destructive",
+        });
+      }
+    );
 
     return () => {
       gameUnsubscribe();
       chatUnsubscribe();
     };
-  }, [gameId, user]);
+  }, [gameId, toast, user]);
   
-  const makeMove = useCallback(async (from: Square, to: Square) => {
-    if (!chess || !game || !playerColor || chess.turn() !== playerColor) return;
+  const makeMove = useCallback(
+    async (from: Square, to: Square) => {
+      if (!chess || !game || !playerColor || chess.turn() !== playerColor) return;
 
-    try {
-        const move = chess.move({ from, to, promotion: 'q' });
+      try {
+        const move = chess.move({ from, to, promotion: "q" });
         if (move === null) {
-            toast({ title: "Invalid Move", description: "That move is not allowed.", variant: "destructive"});
-            return;
+          toast({
+            title: "Invalid Move",
+            description: "That move is not allowed.",
+            variant: "destructive",
+          });
+          return;
         }
 
         let newStatus: GameStatus = "in_progress";
@@ -117,36 +140,49 @@ export function useGameRoom(gameId: string) {
         else if (chess.isStalemate()) newStatus = "stalemate";
         else if (chess.isDraw()) newStatus = "draw";
 
+        // Memperbarui dokumen permainan agar kedua pemain menerima keadaan terbaru
         await updateDoc(doc(db, "games", gameId), {
-            fen: chess.fen(),
-            pgn: chess.pgn(),
-            turn: chess.turn(),
-            status: newStatus,
+          fen: chess.fen(),
+          pgn: chess.pgn(),
+          turn: chess.turn(),
+          status: newStatus,
         });
-    } catch (e) {
+      } catch (e) {
         console.error("Failed to make move:", e);
         // Revert local state if firebase update fails
         chess.undo();
         setGame(game);
-        toast({ title: "Move Failed", description: "Could not sync your move. Please try again.", variant: "destructive"});
-    }
-  }, [chess, game, playerColor, gameId, toast]);
-
-  const sendMessage = useCallback(async (text: string) => {
-    if (!user || !playerColor) return;
-    try {
-        await addDoc(collection(db, `games/${gameId}/chat`), {
-            text,
-            sender: playerColor,
-            uid: user.uid,
-            timestamp: serverTimestamp()
+        toast({
+          title: "Move Failed",
+          description: "Could not sync your move. Please try again.",
+          variant: "destructive",
         });
-    } catch (e) {
-        console.error("Failed to send message:", e);
-        toast({ title: "Chat Error", description: "Could not send your message.", variant: "destructive"});
-    }
-  }, [user, playerColor, gameId, toast]);
+      }
+    },
+    [chess, game, playerColor, gameId, toast]
+  );
 
+  const sendMessage = useCallback(
+    async (text: string) => {
+      if (!user || !playerColor) return;
+      try {
+        await addDoc(collection(db, `games/${gameId}/chat`), {
+          text,
+          sender: playerColor,
+          uid: user.uid,
+          timestamp: serverTimestamp(),
+        });
+      } catch (e) {
+        console.error("Failed to send message:", e);
+        toast({
+          title: "Chat Error",
+          description: "Could not send your message.",
+          variant: "destructive",
+        });
+      }
+    },
+    [user, playerColor, gameId, toast]
+  );
 
   return { game, chess, playerColor, loading, error, makeMove, sendMessage, chatMessages };
 }

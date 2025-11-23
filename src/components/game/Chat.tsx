@@ -1,18 +1,18 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Send, MessageSquare } from "lucide-react";
-import { ChatMessage } from "@/types";
 import { Color } from "chess.js";
 import { formatDistanceToNow } from "date-fns";
+import { MessageSquare, Send } from "lucide-react";
+
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { ChatMessage } from "@/types";
 
 interface ChatProps {
-  gameId: string;
   playerColor: Color | null;
   messages: ChatMessage[];
   onSendMessage: (text: string) => void;
@@ -24,7 +24,8 @@ export function Chat({ playerColor, messages, onSendMessage }: ChatProps) {
 
   useEffect(() => {
     if (scrollAreaRef.current) {
-      scrollAreaRef.current.scrollTo({ top: scrollAreaRef.current.scrollHeight, behavior: 'smooth' });
+      // Menjaga scroll selalu di pesan terbaru agar pemain tidak ketinggalan obrolan
+      scrollAreaRef.current.scrollTo({ top: scrollAreaRef.current.scrollHeight, behavior: "smooth" });
     }
   }, [messages]);
 
@@ -48,9 +49,7 @@ export function Chat({ playerColor, messages, onSendMessage }: ChatProps) {
             {messages.map((msg) => (
               <div
                 key={msg.id}
-                className={`flex items-start gap-2.5 ${
-                  msg.sender === playerColor ? "justify-end" : ""
-                }`}
+                className={`flex items-start gap-2.5 ${msg.sender === playerColor ? "justify-end" : ""}`}
               >
                 {msg.sender !== playerColor && (
                   <Avatar className="w-8 h-8">
@@ -67,16 +66,20 @@ export function Chat({ playerColor, messages, onSendMessage }: ChatProps) {
                   }`}
                 >
                   <p className="text-sm font-normal">{msg.text}</p>
-                   {msg.timestamp && (
-                     <span className={`text-xs mt-1 ${msg.sender === playerColor ? 'text-primary-foreground/70' : 'text-muted-foreground'} self-end`}>
-                        {formatDistanceToNow(msg.timestamp.toDate(), { addSuffix: true })}
+                  {msg.timestamp ? (
+                    <span
+                      className={`text-xs mt-1 ${
+                        msg.sender === playerColor ? "text-primary-foreground/70" : "text-muted-foreground"
+                      } self-end`}
+                    >
+                      {formatDistanceToNow(msg.timestamp.toDate(), { addSuffix: true })}
                     </span>
-                   )}
+                  ) : null}
                 </div>
-                 {msg.sender === playerColor && (
+                {msg.sender === playerColor && (
                   <Avatar className="w-8 h-8">
                     <AvatarFallback className="bg-primary text-primary-foreground text-xs">
-                       {msg.sender === "w" ? "W" : "B"}
+                      {msg.sender === "w" ? "W" : "B"}
                     </AvatarFallback>
                   </Avatar>
                 )}

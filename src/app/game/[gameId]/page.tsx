@@ -68,12 +68,7 @@ export default function GamePage() {
 
         <div className="lg:col-span-1 xl:col-span-1 flex flex-col gap-6">
           <GameInfo game={game} chess={chess} playerColor={playerColor} />
-          <Chat
-            gameId={gameId}
-            playerColor={playerColor}
-            messages={chatMessages}
-            onSendMessage={sendMessage}
-          />
+          <Chat playerColor={playerColor} messages={chatMessages} onSendMessage={sendMessage} />
           <Suggestion fen={chess.fen()} pgn={chess.pgn()} disabled={!isPlayerTurn || isGameOver} />
         </div>
       </main>

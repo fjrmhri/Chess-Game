@@ -1,23 +1,29 @@
 "use client";
 
 import { useState } from "react";
+
 import { useRouter } from "next/navigation";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Game } from "@/types";
 import { Loader2, Swords } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { db } from "@/lib/firebase";
+import { Game } from "@/types";
 
 export default function Home() {
   const router = useRouter();
   const [joinCode, setJoinCode] = useState("");
   const [isCreating, setIsCreating] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   const handleCreateGame = async () => {
     setIsCreating(true);
+    setActionError(null);
+
+    // Menyiapkan state awal permainan baru sehingga halaman game punya data default
     try {
       const newGame: Omit<Game, "id"> = {
         fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
@@ -33,15 +39,29 @@ export default function Home() {
       router.push(`/game/${docRef.id}`);
     } catch (error) {
       console.error("Error creating game:", error);
+      setActionError("Gagal membuat permainan baru. Silakan coba lagi.");
+    } finally {
+      // Tetap menghentikan loading jika navigasi tidak langsung terjadi
       setIsCreating(false);
     }
   };
 
   const handleJoinGame = (e: React.FormEvent) => {
     e.preventDefault();
-    if (joinCode.trim()) {
+
+    if (!joinCode.trim()) {
+      setActionError("Kode permainan tidak boleh kosong.");
+      return;
+    }
+
+    try {
       setIsJoining(true);
       router.push(`/game/${joinCode.trim()}`);
+    } catch (error) {
+      console.error("Error joining game:", error);
+      setActionError("Tidak dapat bergabung ke permainan. Pastikan kode benar.");
+    } finally {
+      setIsJoining(false);
     }
   };
 
@@ -88,14 +108,20 @@ export default function Home() {
                 className="text-center text-base"
                 disabled={isCreating || isJoining}
               />
-              <Button type="submit" variant="secondary" className="w-full" disabled={isCreating || isJoining || !joinCode.trim()}>
-                 {isJoining ? (
-                  <Loader2 className="animate-spin" />
-                ) : (
-                  "Join Game"
-                )}
+              <Button
+                type="submit"
+                variant="secondary"
+                className="w-full"
+                disabled={isCreating || isJoining || !joinCode.trim()}
+              >
+                {isJoining ? <Loader2 className="animate-spin" /> : "Join Game"}
               </Button>
             </form>
+            {actionError ? (
+              <p className="text-sm text-destructive text-center" role="alert">
+                {actionError}
+              </p>
+            ) : null}
           </div>
         </CardContent>
       </Card>
