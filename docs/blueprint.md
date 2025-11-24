@@ -1,4 +1,4 @@
-# **App Name**: Firebase Chess Royale
+# **App Name**: Chess Game
 
 ## Core Features:
 

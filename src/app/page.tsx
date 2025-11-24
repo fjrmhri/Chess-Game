@@ -74,7 +74,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-background py-10 px-4">
-      <div className="mx-auto max-w-4xl">
+      <div className="mx-auto max-w-3xl">
         <Card className="overflow-hidden border-border/60 shadow-xl">
           <div className="flex flex-col gap-3 border-b bg-gradient-to-r from-primary/15 via-background to-accent/15 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
@@ -82,7 +82,7 @@ export default function Home() {
                 <Swords className="h-6 w-6" />
               </span>
               <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Chess Royale</p>
+                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Chess Game</p>
                 <CardTitle className="text-2xl font-headline text-foreground">Jump back into the action</CardTitle>
                 <CardDescription className="text-sm text-muted-foreground">
                   Host a room, join friends, or practice against our upgraded bot.

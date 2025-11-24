@@ -1,41 +1,38 @@
 <p align="center">
   <img src="https://img.shields.io/github/stars/fjrmhri/Pomo-Pixel?style=for-the-badge&logo=github&color=8b5cf6" alt="Stars"/>
   <img src="https://img.shields.io/github/license/fjrmhri/Pomo-Pixel?style=for-the-badge&color=10b981" alt="License"/>
-  <img src="https://img.shields.io/badge/Next.js-15.3.3-black?style=for-the-badge&logo=next.js" alt="Next.js"/>
-  <img src="https://img.shields.io/badge/Firebase-11.9.1-FFCA28?style=for-the-badge&logo=firebase" alt="Firebase"/>
-  <img src="https://img.shields.io/badge/TailwindCSS-3.4.1-38bdf8?style=for-the-badge&logo=tailwind-css" alt="TailwindCSS"/>
+  <img src="https://img.shields.io/badge/Next.js-15.3.4-black?style=for-the-badge&logo=next.js" alt="Next.js"/>
+  <img src="https://img.shields.io/badge/Firebase-12.1.0-FFCA28?style=for-the-badge&logo=firebase" alt="Firebase"/>
+  <img src="https://img.shields.io/badge/TailwindCSS-4-38bdf8?style=for-the-badge&logo=tailwind-css" alt="TailwindCSS"/>
 </p>
 
+# Chess Game
 
-# Firebase Chess Royale
+Chess Game adalah aplikasi catur real-time berbasis Next.js dan Firebase. Pemain dapat membuat atau bergabung ke ruang multipemain, berbagi papan dan histori langkah lewat Firestore, atau berlatih melawan bot minimax lokal dengan UI yang sama.
 
-Real-time chess with Next.js (React + TypeScript) on Firebase. Create or join multiplayer rooms that sync boards, moves, and chat through Firestore, or play locally against a built-in bot—all using the same polished UI. Deploy quickly to Vercel without custom servers.
+## Fitur
+- **Multiplayer sinkron**: Membuat/bergabung ke room, kursi pemain otomatis, dan status giliran selalu terbarui.
+- **Bot lokal**: Bermain melawan bot minimax tanpa layanan eksternal.
+- **Aturan lengkap**: Validasi langkah menggunakan `chess.js`, dukungan check, checkmate, stalemate, dan resign.
+- **Chat langsung**: Obrolan per-ruang tersimpan di Firestore dan otomatis scroll ke pesan terbaru.
+- **UI ringkas**: Tata letak responsif menjaga papan, kontrol, dan chat tetap terlihat di layar desktop umum.
 
-## Features
-- **Multiplayer**: Create/join rooms, auto-seat players, and keep presence flags updated.
-- **Bot mode**: Play locally against a minimax-powered bot that reuses the same board and rules.
-- **Full chess rules**: Legal move validation, check, checkmate, stalemate, draws, and resignation.
-- **Real-time chat**: Per-room chat stored in Firestore subcollections, auto-scrolling to new messages.
-- **Compact UI**: Responsive layout keeps board, controls, and chat visible without scrolling on typical desktops.
-- **Deployable to Vercel**: Pure client + Firebase integration—no custom server required.
-
-## Tech Stack
+## Teknologi
 - **Frontend**: Next.js (App Router), React, TypeScript, Tailwind CSS, shadcn/ui.
-- **Backend**: Firebase Firestore + Firebase Auth (anonymous sign-in).
-- **Chess logic**: `chess.js` for rules/validation and a custom minimax evaluator for the bot.
+- **Backend**: Firebase Firestore & Firebase Auth (anonim) untuk sinkronisasi dan identitas pemain.
+- **Logika catur**: `chess.js` untuk aturan & validasi, minimax kustom untuk bot.
 
-## Getting Started
-### Prerequisites
+## Prasyarat
 - Node.js 18+
-- A Firebase project with Firestore and Anonymous Authentication enabled.
+- Proyek Firebase dengan Firestore dan Anonymous Authentication aktif.
 
-### Installation
+## Instalasi
 ```bash
 npm install
 cp .env.local.example .env.local
 ```
 
-Fill `.env.local` with your Firebase config keys:
+Isi `.env.local` dengan kredensial Firebase Anda:
 ```
 NEXT_PUBLIC_FIREBASE_API_KEY=
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
@@ -45,41 +42,41 @@ NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
 NEXT_PUBLIC_FIREBASE_APP_ID=
 ```
 
-### Run Locally
+## Menjalankan Secara Lokal
 ```bash
 npm run dev
 ```
-Open http://localhost:9002 to play.
+Buka http://localhost:9002 untuk bermain.
 
-### Deployment (Vercel)
-1. Push this repo to GitHub.
-2. Create a new Vercel project and import the repo.
-3. Add the same Firebase environment variables in Vercel Project Settings.
-4. Deploy—no additional server setup needed.
+## Deployment
+1. Push repo ini ke GitHub.
+2. Buat proyek baru di Vercel dan impor repo.
+3. Tambahkan variabel lingkungan Firebase yang sama di Project Settings Vercel.
+4. Deploy — tidak perlu server kustom.
 
-## Usage
-### Multiplayer
-1. On the lobby, choose **"Multiplayer: Create Room"** or enter an existing Game ID to join.
-2. Invite an opponent by sharing the Game ID (URL includes it).
-3. Play turns on the synced board; status, last move times, and presence are stored in Firestore.
-4. Use the chat panel to talk—messages stream live without blocking gameplay.
-5. Resign anytime from the action bar.
+## Cara Pakai
+### Mode Multiplayer
+1. Di halaman awal, klik **Start Multiplayer Room** untuk membuat ruang baru atau masukkan ID undangan untuk bergabung.
+2. Bagikan tautan/ID game ke teman.
+3. Mainkan giliran pada papan yang tersinkron, status dan giliran tercatat di Firestore.
+4. Gunakan panel chat untuk berkomunikasi; pesan muncul secara real-time.
+5. Tekan resign dari action bar jika ingin menyerah.
 
-### Play vs Bot
-1. From the lobby, click **"Play vs Bot"**.
-2. Pick White or Black, then play locally. The minimax bot responds immediately using the shared rules engine.
-3. Restart or switch colors from the control panel.
+### Mode Bot
+1. Dari menu utama pilih **Practice vs Bot**.
+2. Pilih warna bidak dan mulai bermain; bot minimax akan merespons segera.
+3. Gunakan kontrol untuk restart atau berpindah warna.
 
-## Project Structure (high level)
-- `src/app/` – Pages (`/`, `/game/[gameId]`, `/bot`).
-- `src/components/game/` – Chess UI (board, status, chat, actions).
-- `src/hooks/` – Game state management (`useGameRoom` for Firestore, `useBotGame` for local bot play).
-- `src/config/` & `src/lib/` – Firebase configuration/initialization.
-- `src/utils/` – Bot evaluation helpers.
-- `src/types/` – Shared TypeScript types.
+## Struktur Proyek
+- `src/app/` – Halaman Next.js (`/`, `/game/[gameId]`, `/bot`).
+- `src/components/game/` – UI papan, info game, chat, aksi, dialog game over, dan saran langkah.
+- `src/hooks/` – Manajemen state & efek (`useGameRoom` untuk Firestore, `useBotGame` untuk bot lokal).
+- `src/config/` & `src/lib/` – Konfigurasi dan inisialisasi Firebase.
+- `src/utils/` – Helper evaluasi bot.
+- `src/types/` – Tipe bersama untuk game, chat, dan status pemain.
 
-## Contributing
-Issues and pull requests are welcome! Please keep components presentational and prefer hooks for side effects and Firebase calls.
+## Kontribusi
+Pull request dan isu sangat dipersilakan. Jaga komponen tetap presentasional dan utamakan hooks untuk logika serta pemanggilan Firebase.
 
-## License
+## Lisensi
 MIT

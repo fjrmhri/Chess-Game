@@ -1,4 +1,4 @@
-# Firebase Chess Royale - Development Guide
+# Chess Game - Development Guide
 
 This document summarizes the architecture, data model, and extension points for the real-time multiplayer and bot-enabled chess experience.
 

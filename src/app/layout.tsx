@@ -3,8 +3,8 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
-  title: "Chess Royale",
-  description: "A real-time multiplayer chess experience built with Next.js and Firebase.",
+  title: "Chess Game",
+  description: "Chess Game: pengalaman catur real-time dengan Next.js dan Firebase.",
 };
 
 export default function RootLayout({
@@ -19,8 +19,20 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@400;700&display=swap" rel="stylesheet" />
       </head>
-      <body className="font-body antialiased">
-        {children}
+      <body className="font-body antialiased min-h-screen bg-background text-foreground">
+        <div className="flex min-h-screen flex-col">
+          <div className="flex-1">{children}</div>
+          <footer className="py-4 text-center text-xs text-muted-foreground">
+            <a
+              href="https://github.com/fjrmhri"
+              className="transition-colors hover:text-primary underline-offset-4 hover:underline"
+              target="_blank"
+              rel="noreferrer"
+            >
+              github/fjrmhri
+            </a>
+          </footer>
+        </div>
         <Toaster />
       </body>
     </html>
