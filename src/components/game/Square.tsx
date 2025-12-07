@@ -21,13 +21,23 @@ export function Square({
   inCheck,
   onClick,
 }: SquareProps) {
+  const fileIndex = square.charCodeAt(0) - 97;
+  const rankIndex = parseInt(square[1], 10);
+  const isLightSquare = (fileIndex + rankIndex) % 2 === 0;
+  const backgroundClass = inCheck
+    ? "bg-destructive/40"
+    : isSelected
+      ? "bg-accent/40"
+      : isLightSquare
+        ? "bg-muted/30"
+        : "bg-muted/70";
+
   return (
     <div
       onClick={onClick}
       className={cn(
         "w-[12.5%] aspect-square flex items-center justify-center relative transition-colors",
-        isSelected && "bg-accent/40",
-        inCheck && "bg-destructive/40"
+        backgroundClass
       )}
     >
       {piece && <Piece piece={piece} />}

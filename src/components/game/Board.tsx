@@ -3,7 +3,6 @@
 import { useState } from "react";
 import type { Chess } from "chess.js";
 import type { Color, Square as ChessSquare } from "chess.js";
-import boardTextureDefault from "../../../assets/board/board_persp_01.png";
 import { Square } from "./Square";
 
 interface BoardProps {
@@ -13,8 +12,6 @@ interface BoardProps {
   isPlayerTurn: boolean;
   isGameOver: boolean;
 }
-
-const DEFAULT_BOARD_TEXTURE = boardTextureDefault.src;
 
 export function Board({ chess, onMove, playerColor, isPlayerTurn, isGameOver }: BoardProps) {
   const [selectedPiece, setSelectedPiece] = useState<ChessSquare | null>(null);
@@ -68,14 +65,7 @@ export function Board({ chess, onMove, playerColor, isPlayerTurn, isGameOver }: 
     : [];
 
   return (
-    <div
-      className="relative aspect-square w-full max-w-[520px] md:max-w-[560px] mx-auto select-none overflow-hidden rounded-xl shadow-lg"
-      style={{
-        backgroundImage: `url(${DEFAULT_BOARD_TEXTURE})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
+    <div className="relative aspect-square w-full max-w-[520px] md:max-w-[560px] mx-auto select-none overflow-hidden rounded-xl shadow-lg bg-muted/30">
       <div className="absolute inset-0 flex flex-col">
         {boardOrientation.map((row, rowIndex) => (
           <div key={rowIndex} className="flex flex-1">
