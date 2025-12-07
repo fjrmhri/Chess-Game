@@ -15,7 +15,9 @@ const initialFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 export function useBotGame(options: UseBotGameOptions = {}) {
   const [chess] = useState(() => new Chess(initialFen));
-  const [playerColor, setPlayerColor] = useState<Color>(options.playerColor ?? "w");
+  const [playerColor, setPlayerColor] = useState<Color>(
+    options.playerColor ?? "w"
+  );
   const [status, setStatus] = useState<GameStatus>("in_progress");
   const [winner, setWinner] = useState<Color | null>(null);
   const [version, setVersion] = useState(0);
@@ -91,8 +93,12 @@ export function useBotGame(options: UseBotGameOptions = {}) {
     const currentFen = chess.fen();
     const timeout = setTimeout(() => {
       try {
-        // Menjalankan perhitungan bot secara aman agar UI tidak crash ketika terjadi error evaluasi
-        const bestMove = findBestMove(chess, botColor, searchDepth, searchTimeMs);
+        const bestMove = findBestMove(
+          chess,
+          botColor,
+          searchDepth,
+          searchTimeMs
+        );
         if (status !== "in_progress") return;
         if (chess.fen() !== currentFen) return;
         if (bestMove) {

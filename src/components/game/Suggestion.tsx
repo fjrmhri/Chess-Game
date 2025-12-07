@@ -26,7 +26,6 @@ export function Suggestion({ fen, pgn, disabled }: SuggestionProps) {
     setSuggestion(null);
 
     try {
-      // Meminta rekomendasi langkah dengan fallback agar UI tidak terjebak loading
       const result = await getAiSuggestion(fen, pgn);
       if (result.success) {
         setSuggestion(result.suggestion);
@@ -50,7 +49,11 @@ export function Suggestion({ fen, pgn, disabled }: SuggestionProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <Button onClick={handleGetSuggestion} disabled={loading || disabled} className="w-full">
+        <Button
+          onClick={handleGetSuggestion}
+          disabled={loading || disabled}
+          className="w-full"
+        >
           {loading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -63,7 +66,9 @@ export function Suggestion({ fen, pgn, disabled }: SuggestionProps) {
         {suggestion && (
           <Alert>
             <AlertTitle>Suggested Move</AlertTitle>
-            <AlertDescription className="font-mono text-lg">{suggestion}</AlertDescription>
+            <AlertDescription className="font-mono text-lg">
+              {suggestion}
+            </AlertDescription>
           </Alert>
         )}
         {error && (

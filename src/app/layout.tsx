@@ -3,12 +3,10 @@ import "./globals.css";
 
 import { Toaster } from "@/components/ui/toaster";
 
-// Tata letak root menjaga font dan toaster tersedia di seluruh aplikasi
-// sehingga halaman lain tidak perlu menginisialisasi ulang elemen global.
-
 export const metadata: Metadata = {
   title: "Chess Game",
-  description: "Chess Game: pengalaman catur real-time dengan Next.js dan Firebase.",
+  description:
+    "Chess Game: pengalaman catur real-time dengan sinkronisasi mulus.",
 };
 
 export default function RootLayout({
@@ -20,8 +18,15 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@400;700&display=swap" rel="stylesheet" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Alegreya:wght@400;700&display=swap"
+          rel="stylesheet"
+        />
       </head>
       <body className="font-body antialiased min-h-screen bg-background text-foreground">
         <div className="flex min-h-screen flex-col">

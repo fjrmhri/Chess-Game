@@ -11,64 +11,39 @@ const pieceValues: Record<string, number> = {
 
 const pieceSquareTables: Record<string, number[]> = {
   p: [
-    0, 0, 0, 0, 0, 0, 0, 0,
-    50, 50, 50, 50, 50, 50, 50, 50,
-    10, 10, 20, 30, 30, 20, 10, 10,
-    5, 5, 10, 27, 27, 10, 5, 5,
-    0, 0, 0, 25, 25, 0, 0, 0,
-    5, -5, -10, 0, 0, -10, -5, 5,
-    5, 10, 10, -25, -25, 10, 10, 5,
-    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 50, 50, 50, 50, 50, 50, 50, 50, 10, 10, 20, 30, 30,
+    20, 10, 10, 5, 5, 10, 27, 27, 10, 5, 5, 0, 0, 0, 25, 25, 0, 0, 0, 5, -5,
+    -10, 0, 0, -10, -5, 5, 5, 10, 10, -25, -25, 10, 10, 5, 0, 0, 0, 0, 0, 0, 0,
+    0,
   ],
   n: [
-    -50, -40, -30, -30, -30, -30, -40, -50,
-    -40, -20, 0, 0, 0, 0, -20, -40,
-    -30, 0, 10, 15, 15, 10, 0, -30,
-    -30, 5, 15, 20, 20, 15, 5, -30,
-    -30, 0, 15, 20, 20, 15, 0, -30,
-    -30, 5, 10, 15, 15, 10, 5, -30,
-    -40, -20, 0, 5, 5, 0, -20, -40,
-    -50, -40, -30, -30, -30, -30, -40, -50,
+    -50, -40, -30, -30, -30, -30, -40, -50, -40, -20, 0, 0, 0, 0, -20, -40, -30,
+    0, 10, 15, 15, 10, 0, -30, -30, 5, 15, 20, 20, 15, 5, -30, -30, 0, 15, 20,
+    20, 15, 0, -30, -30, 5, 10, 15, 15, 10, 5, -30, -40, -20, 0, 5, 5, 0, -20,
+    -40, -50, -40, -30, -30, -30, -30, -40, -50,
   ],
   b: [
-    -20, -10, -10, -10, -10, -10, -10, -20,
-    -10, 5, 0, 0, 0, 0, 5, -10,
-    -10, 10, 10, 10, 10, 10, 10, -10,
-    -10, 0, 10, 10, 10, 10, 0, -10,
-    -10, 5, 5, 10, 10, 5, 5, -10,
-    -10, 0, 5, 10, 10, 5, 0, -10,
-    -10, 0, 0, 0, 0, 0, 0, -10,
-    -20, -10, -10, -10, -10, -10, -10, -20,
+    -20, -10, -10, -10, -10, -10, -10, -20, -10, 5, 0, 0, 0, 0, 5, -10, -10, 10,
+    10, 10, 10, 10, 10, -10, -10, 0, 10, 10, 10, 10, 0, -10, -10, 5, 5, 10, 10,
+    5, 5, -10, -10, 0, 5, 10, 10, 5, 0, -10, -10, 0, 0, 0, 0, 0, 0, -10, -20,
+    -10, -10, -10, -10, -10, -10, -20,
   ],
   r: [
-    0, 0, 0, 0, 0, 0, 0, 0,
-    5, 10, 10, 10, 10, 10, 10, 5,
-    -5, 0, 0, 0, 0, 0, 0, -5,
-    -5, 0, 0, 0, 0, 0, 0, -5,
-    -5, 0, 0, 0, 0, 0, 0, -5,
-    -5, 0, 0, 0, 0, 0, 0, -5,
-    -5, 0, 0, 0, 0, 0, 0, -5,
-    0, 0, 0, 5, 5, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 5, 10, 10, 10, 10, 10, 10, 5, -5, 0, 0, 0, 0, 0, 0,
+    -5, -5, 0, 0, 0, 0, 0, 0, -5, -5, 0, 0, 0, 0, 0, 0, -5, -5, 0, 0, 0, 0, 0,
+    0, -5, -5, 0, 0, 0, 0, 0, 0, -5, 0, 0, 0, 5, 5, 0, 0, 0,
   ],
   q: [
-    -20, -10, -10, -5, -5, -10, -10, -20,
-    -10, 0, 0, 0, 0, 5, 0, -10,
-    -10, 0, 5, 5, 5, 5, 5, -10,
-    -5, 0, 5, 5, 5, 5, 0, -5,
-    0, 0, 5, 5, 5, 5, 0, -5,
-    -10, 5, 5, 5, 5, 5, 0, -10,
-    -10, 0, 5, 0, 0, 0, 0, -10,
-    -20, -10, -10, -5, -5, -10, -10, -20,
+    -20, -10, -10, -5, -5, -10, -10, -20, -10, 0, 0, 0, 0, 5, 0, -10, -10, 0, 5,
+    5, 5, 5, 5, -10, -5, 0, 5, 5, 5, 5, 0, -5, 0, 0, 5, 5, 5, 5, 0, -5, -10, 5,
+    5, 5, 5, 5, 0, -10, -10, 0, 5, 0, 0, 0, 0, -10, -20, -10, -10, -5, -5, -10,
+    -10, -20,
   ],
   k: [
-    -30, -40, -40, -50, -50, -40, -40, -30,
-    -30, -40, -40, -50, -50, -40, -40, -30,
-    -30, -40, -40, -50, -50, -40, -40, -30,
-    -30, -40, -40, -50, -50, -40, -40, -30,
-    -20, -30, -30, -40, -40, -30, -30, -20,
-    -10, -20, -20, -20, -20, -20, -20, -10,
-    20, 20, 0, 0, 0, 0, 20, 20,
-    20, 30, 10, 0, 0, 10, 30, 20,
+    -30, -40, -40, -50, -50, -40, -40, -30, -30, -40, -40, -50, -50, -40, -40,
+    -30, -30, -40, -40, -50, -50, -40, -40, -30, -30, -40, -40, -50, -50, -40,
+    -40, -30, -20, -30, -30, -40, -40, -30, -30, -20, -10, -20, -20, -20, -20,
+    -20, -20, -10, 20, 20, 0, 0, 0, 0, 20, 20, 20, 30, 10, 0, 0, 10, 30, 20,
   ],
 };
 
@@ -91,7 +66,6 @@ function evaluateBoard(chess: Chess, forColor: Color): number {
     }
   }
 
-  // Encourage mobility and tempo while avoiding exposed kings
   const mobility = chess.moves({ verbose: true }).length;
   score += mobility * 2;
   if (chess.inCheck()) {
@@ -109,10 +83,13 @@ function orderMoves(moves: Move[]): Move[] {
   return moves
     .map((move) => {
       const isCapture = typeof move.captured !== "undefined";
-      const isPromotion = Boolean((move as Move & { promotion?: string }).promotion);
+      const isPromotion = Boolean(
+        (move as Move & { promotion?: string }).promotion
+      );
       const captureValue = move.captured ? pieceValues[move.captured] ?? 0 : 0;
       const movingValue = pieceValues[(move.piece as string) ?? ""] ?? 0;
-      const priority = (isCapture ? captureValue - movingValue : 0) + (isPromotion ? 300 : 0);
+      const priority =
+        (isCapture ? captureValue - movingValue : 0) + (isPromotion ? 300 : 0);
       const san = (move as Move & { san?: string }).san;
       const isChecking = san?.includes("+") ?? false;
       return { move, score: priority + (isChecking ? 50 : 0) };
@@ -143,7 +120,15 @@ function negamax(
 
   for (const move of moves) {
     chess.move(move);
-    const score = -negamax(chess, depth - 1, -beta, -alpha, maximizingColor, startTime, timeLimitMs);
+    const score = -negamax(
+      chess,
+      depth - 1,
+      -beta,
+      -alpha,
+      maximizingColor,
+      startTime,
+      timeLimitMs
+    );
     chess.undo();
 
     bestScore = Math.max(bestScore, score);
@@ -157,7 +142,12 @@ function negamax(
   return bestScore;
 }
 
-export function findBestMove(chess: Chess, color: Color, maxDepth = 4, timeLimitMs = 1200): Move | null {
+export function findBestMove(
+  chess: Chess,
+  color: Color,
+  maxDepth = 4,
+  timeLimitMs = 1200
+): Move | null {
   const start = performance.now();
   const moves = orderMoves(chess.moves({ verbose: true }) as Move[]);
   let bestMove: Move | null = null;
@@ -166,7 +156,15 @@ export function findBestMove(chess: Chess, color: Color, maxDepth = 4, timeLimit
   for (let depth = 1; depth <= maxDepth; depth += 1) {
     for (const move of moves) {
       chess.move(move);
-      const evaluation = -negamax(chess, depth - 1, -Infinity, Infinity, color, start, timeLimitMs);
+      const evaluation = -negamax(
+        chess,
+        depth - 1,
+        -Infinity,
+        Infinity,
+        color,
+        start,
+        timeLimitMs
+      );
       chess.undo();
 
       if (evaluation > bestEval) {

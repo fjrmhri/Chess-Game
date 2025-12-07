@@ -28,21 +28,26 @@ export function ActionBar({
 }: ActionBarProps) {
   const isYourTurn = playerColor && playerColor === turn;
 
-  // Panel tindakan menjaga aksi utama tetap mudah dijangkau dan transparan status giliran
   return (
     <Card>
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center justify-between text-lg">
           <span>{modeLabel}</span>
-          <span className="text-sm text-muted-foreground capitalize">{status.replace("_", " ")}</span>
+          <span className="text-sm text-muted-foreground capitalize">
+            {status.replace("_", " ")}
+          </span>
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
         <div className="rounded-md bg-muted/60 px-3 py-2 text-sm">
           {playerColor ? (
             <div className="flex items-center justify-between">
-              <span className="font-medium">{isYourTurn ? "Your turn" : "Opponent turn"}</span>
-              <span className="text-muted-foreground">{playerColor === "w" ? "White" : "Black"}</span>
+              <span className="font-medium">
+                {isYourTurn ? "Your turn" : "Opponent turn"}
+              </span>
+              <span className="text-muted-foreground">
+                {playerColor === "w" ? "White" : "Black"}
+              </span>
             </div>
           ) : (
             <span className="text-muted-foreground">Assigning seat...</span>
@@ -50,7 +55,12 @@ export function ActionBar({
         </div>
         <Separator />
         <div className="flex gap-2">
-          <Button variant="destructive" className="flex-1" disabled={!canMove} onClick={onResign}>
+          <Button
+            variant="destructive"
+            className="flex-1"
+            disabled={!canMove}
+            onClick={onResign}
+          >
             <Flag className="h-4 w-4 mr-2" /> Resign
           </Button>
           {onReset ? (

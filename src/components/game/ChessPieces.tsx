@@ -1,6 +1,3 @@
-// Komponen SVG bidak catur bergaya minimalis
-// Sumber: User:Cburnett, CC BY-SA 3.0, via Wikimedia Commons
-
 import { SVGProps } from "react";
 
 const pieceStyles: SVGProps<SVGSVGElement> = {
@@ -16,11 +13,20 @@ export function WhiteKing(props: SVGProps<SVGSVGElement>) {
   return (
     <svg {...pieceStyles} {...props}>
       <g fill="white">
-        <path d="M 22.5,11.63 L 22.5,6" style={{ fill: "none", stroke: "black", strokeLinejoin: "miter" }} />
-        <path d="M 20,8 L 25,8" style={{ fill: "none", stroke: "black", strokeLinejoin: "miter" }} />
+        <path
+          d="M 22.5,11.63 L 22.5,6"
+          style={{ fill: "none", stroke: "black", strokeLinejoin: "miter" }}
+        />
+        <path
+          d="M 20,8 L 25,8"
+          style={{ fill: "none", stroke: "black", strokeLinejoin: "miter" }}
+        />
         <path d="M 22.5,25 C 22.5,25 27,17.5 25.5,14.5 C 25.5,14.5 24.5,12 22.5,12 C 20.5,12 19.5,14.5 19.5,14.5 C 18,17.5 22.5,25 22.5,25" />
         <path d="M 11.5,37 C 17,40.5 27,40.5 32.5,37 L 32.5,32 C 32.5,32 41.5,25.5 38.5,19.5 C 34.5,13 25,16 22.5,25 L 22.5,25 C 20,16 10.5,13 6.5,19.5 C 3.5,25.5 12.5,32 12.5,32 L 11.5,37" />
-        <path d="M 20,8 L 25,8" style={{ fill: "none", stroke: "black", strokeLinejoin: "miter" }} />
+        <path
+          d="M 20,8 L 25,8"
+          style={{ fill: "none", stroke: "black", strokeLinejoin: "miter" }}
+        />
       </g>
     </svg>
   );
@@ -50,7 +56,10 @@ export function WhiteRook(props: SVGProps<SVGSVGElement>) {
         <path d="M 12,36 L 12,32 L 33,32 L 33,36 L 12,36 z" />
         <path d="M 11,14 L 11,9 L 15,9 L 15,11 L 20,11 L 20,9 L 25,9 L 25,11 L 30,11 L 30,9 L 34,9 L 34,14" />
         <path d="M 34,14 L 31,14 L 31,29.5 L 14,29.5 L 14,14 L 11,14" />
-        <path d="M 31,14 L 31,29.5 L 14,29.5 L 14,14" style={{ fill: "none", stroke: "white", strokeWidth: 0 }} />
+        <path
+          d="M 31,14 L 31,29.5 L 14,29.5 L 14,14"
+          style={{ fill: "none", stroke: "white", strokeWidth: 0 }}
+        />
       </g>
     </svg>
   );
@@ -66,7 +75,10 @@ export function WhiteBishop(props: SVGProps<SVGSVGElement>) {
         <path d="M 22.5,26 C 22.5,26 19.5,24.5 17.5,26 C 17.5,26 15,27.5 15,30 C 15,30 14.5,30.5 15,32" />
         <path d="M 15,32 C 13,29.5 15,14.5 15,14.5 C 15,14.5 13,11.5 15,9 C 17,5 21,5 22.5,9" />
         <path d="M 22.5,15.5 A 1,1 0 1,1 22.5,13.5 A 1,1 0 1,1 22.5,15.5 z" />
-        <path d="M 20,8 L 25,8" style={{ fill: "none", stroke: "black", strokeLinejoin: "miter" }} />
+        <path
+          d="M 20,8 L 25,8"
+          style={{ fill: "none", stroke: "black", strokeLinejoin: "miter" }}
+        />
       </g>
     </svg>
   );

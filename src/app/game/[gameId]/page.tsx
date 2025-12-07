@@ -46,7 +46,7 @@ export default function GamePage() {
   }
 
   if (!game || !chess) {
-    return null; // Should be handled by error state
+    return null;
   }
 
   const isPlayerTurn = chess.turn() === playerColor;
@@ -63,15 +63,25 @@ export default function GamePage() {
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <span>Switch mode:</span>
-              <Link href="/bot" className="underline underline-offset-4">Play vs Bot</Link>
+              <Link href="/bot" className="underline underline-offset-4">
+                Play vs Bot
+              </Link>
             </div>
           </CardHeader>
         </Card>
 
         <main className="grid grid-cols-1 items-start gap-4 xl:gap-6 lg:grid-cols-[320px_minmax(520px,1fr)_320px]">
           <div className="order-3 space-y-4 lg:order-1">
-            <Suggestion fen={chess.fen()} pgn={chess.pgn()} disabled={!isPlayerTurn || isGameOver} />
-            <Chat playerColor={playerColor} messages={chatMessages} onSendMessage={sendMessage} />
+            <Suggestion
+              fen={chess.fen()}
+              pgn={chess.pgn()}
+              disabled={!isPlayerTurn || isGameOver}
+            />
+            <Chat
+              playerColor={playerColor}
+              messages={chatMessages}
+              onSendMessage={sendMessage}
+            />
           </div>
 
           <Card className="order-1 lg:order-2 lg:row-span-2">
@@ -99,7 +109,11 @@ export default function GamePage() {
           </div>
         </main>
       </div>
-      <GameOverDialog status={game.status} playerColor={playerColor} winner={game.winner} />
+      <GameOverDialog
+        status={game.status}
+        playerColor={playerColor}
+        winner={game.winner}
+      />
     </div>
   );
 }

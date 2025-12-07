@@ -24,8 +24,10 @@ export function Chat({ playerColor, messages, onSendMessage }: ChatProps) {
 
   useEffect(() => {
     if (scrollAreaRef.current) {
-      // Menjaga scroll selalu di pesan terbaru agar pemain tidak ketinggalan obrolan
-      scrollAreaRef.current.scrollTo({ top: scrollAreaRef.current.scrollHeight, behavior: "smooth" });
+      scrollAreaRef.current.scrollTo({
+        top: scrollAreaRef.current.scrollHeight,
+        behavior: "smooth",
+      });
     }
   }, [messages]);
 
@@ -49,7 +51,9 @@ export function Chat({ playerColor, messages, onSendMessage }: ChatProps) {
             {messages.map((msg) => (
               <div
                 key={msg.id}
-                className={`flex items-start gap-2.5 ${msg.sender === playerColor ? "justify-end" : ""}`}
+                className={`flex items-start gap-2.5 ${
+                  msg.sender === playerColor ? "justify-end" : ""
+                }`}
               >
                 {msg.sender !== playerColor && (
                   <Avatar className="w-8 h-8">
@@ -69,10 +73,14 @@ export function Chat({ playerColor, messages, onSendMessage }: ChatProps) {
                   {msg.timestamp ? (
                     <span
                       className={`text-xs mt-1 ${
-                        msg.sender === playerColor ? "text-primary-foreground/70" : "text-muted-foreground"
+                        msg.sender === playerColor
+                          ? "text-primary-foreground/70"
+                          : "text-muted-foreground"
                       } self-end`}
                     >
-                      {formatDistanceToNow(msg.timestamp.toDate(), { addSuffix: true })}
+                      {formatDistanceToNow(msg.timestamp.toDate(), {
+                        addSuffix: true,
+                      })}
                     </span>
                   ) : null}
                 </div>
@@ -87,14 +95,21 @@ export function Chat({ playerColor, messages, onSendMessage }: ChatProps) {
             ))}
           </div>
         </ScrollArea>
-        <form onSubmit={handleSubmit} className="flex w-full items-center space-x-2 p-4 border-t">
+        <form
+          onSubmit={handleSubmit}
+          className="flex w-full items-center space-x-2 p-4 border-t"
+        >
           <Input
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="Type a message..."
             disabled={!playerColor}
           />
-          <Button type="submit" size="icon" disabled={!newMessage.trim() || !playerColor}>
+          <Button
+            type="submit"
+            size="icon"
+            disabled={!newMessage.trim() || !playerColor}
+          >
             <Send className="h-4 w-4" />
             <span className="sr-only">Send</span>
           </Button>

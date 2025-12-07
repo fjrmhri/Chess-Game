@@ -1,37 +1,42 @@
-'use server';
+"use server";
 
-/**
- * @fileOverview AI move suggestion flow.
- *
- * - aiMoveSuggestion - A function that suggests a chess move based on the current board state.
- * - AiMoveSuggestionInput - The input type for the aiMoveSuggestion function.
- * - AiMoveSuggestionOutput - The return type for the aiMoveSuggestion function.
- */
-
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { ai } from "@/ai/genkit";
+import { z } from "genkit";
 
 const AiMoveSuggestionInputSchema = z.object({
-  boardState: z.string().describe('FEN representation of the current chess board state.'),
-  moveHistory: z.string().optional().describe('PGN representation of the game move history.'),
+  boardState: z
+    .string()
+    .describe("FEN representation of the current chess board state."),
+  moveHistory: z
+    .string()
+    .optional()
+    .describe("PGN representation of the game move history."),
 });
 export type AiMoveSuggestionInput = z.infer<typeof AiMoveSuggestionInputSchema>;
 
 const AiMoveSuggestionOutputSchema = z.object({
-  suggestedMove: z.string().describe('Suggested move in algebraic notation.'),
-  reasoning: z.string().describe('Reasoning behind the suggested move.'),
-  confidence: z.number().describe('A number between 0 and 1 indicating the AI models confidence in the quality of the move.'),
+  suggestedMove: z.string().describe("Suggested move in algebraic notation."),
+  reasoning: z.string().describe("Reasoning behind the suggested move."),
+  confidence: z
+    .number()
+    .describe(
+      "A number between 0 and 1 indicating the AI models confidence in the quality of the move."
+    ),
 });
-export type AiMoveSuggestionOutput = z.infer<typeof AiMoveSuggestionOutputSchema>;
+export type AiMoveSuggestionOutput = z.infer<
+  typeof AiMoveSuggestionOutputSchema
+>;
 
-export async function aiMoveSuggestion(input: AiMoveSuggestionInput): Promise<AiMoveSuggestionOutput> {
+export async function aiMoveSuggestion(
+  input: AiMoveSuggestionInput
+): Promise<AiMoveSuggestionOutput> {
   return aiMoveSuggestionFlow(input);
 }
 
 const prompt = ai.definePrompt({
-  name: 'aiMoveSuggestionPrompt',
-  input: {schema: AiMoveSuggestionInputSchema},
-  output: {schema: AiMoveSuggestionOutputSchema},
+  name: "aiMoveSuggestionPrompt",
+  input: { schema: AiMoveSuggestionInputSchema },
+  output: { schema: AiMoveSuggestionOutputSchema },
   prompt: `You are a grandmaster chess player providing move suggestions to a student.
 
   Given the current board state in FEN notation: {{{boardState}}}
@@ -47,12 +52,12 @@ const prompt = ai.definePrompt({
 
 const aiMoveSuggestionFlow = ai.defineFlow(
   {
-    name: 'aiMoveSuggestionFlow',
+    name: "aiMoveSuggestionFlow",
     inputSchema: AiMoveSuggestionInputSchema,
     outputSchema: AiMoveSuggestionOutputSchema,
   },
-  async input => {
-    const {output} = await prompt(input);
+  async (input) => {
+    const { output } = await prompt(input);
     return output!;
   }
 );

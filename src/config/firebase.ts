@@ -1,7 +1,3 @@
-// This file is used to configure the Firebase SDK.
-// It is important to keep this file in the project.
-// Your Firebase configuration should be stored in environment variables.
-
 export const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,

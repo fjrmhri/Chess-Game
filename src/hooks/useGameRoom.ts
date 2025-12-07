@@ -13,7 +13,12 @@ import {
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
-import { User, getAuth, onAuthStateChanged, signInAnonymously } from "firebase/auth";
+import {
+  User,
+  getAuth,
+  onAuthStateChanged,
+  signInAnonymously,
+} from "firebase/auth";
 import { Chess } from "chess.js";
 import type { Color, Square } from "chess.js";
 
@@ -33,7 +38,6 @@ export function useGameRoom(gameId: string) {
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
-  // Instance Chess dibuat ulang ketika FEN berubah agar logika langkah tetap sinkron
   const chess = useMemo(() => (game ? new Chess(game.fen) : null), [game]);
 
   const playerColor: Color | null = useMemo(() => {
@@ -69,7 +73,8 @@ export function useGameRoom(gameId: string) {
     setLoading(true);
     const gameRef = doc(db, "games", gameId);
 
-    const gameUnsubscribe = onSnapshot(gameRef,
+    const gameUnsubscribe = onSnapshot(
+      gameRef,
       (docSnap) => {
         if (docSnap.exists()) {
           const rawData = docSnap.data();
@@ -84,8 +89,10 @@ export function useGameRoom(gameId: string) {
             ...rawData,
           } as Game;
 
-          // Otomatis mengisi slot kosong agar pemain langsung terdaftar di papan
-          if (user.uid !== gameData.players.w && user.uid !== gameData.players.b) {
+          if (
+            user.uid !== gameData.players.w &&
+            user.uid !== gameData.players.b
+          ) {
             if (gameData.players.w === null) {
               updateDoc(gameRef, {
                 "players.w": user.uid,
@@ -93,7 +100,10 @@ export function useGameRoom(gameId: string) {
                 presence: {
                   ...(gameData.presence ?? {}),
                   w: { online: true, lastActive: serverTimestamp() },
-                  b: gameData.presence?.b ?? { online: false, lastActive: null },
+                  b: gameData.presence?.b ?? {
+                    online: false,
+                    lastActive: null,
+                  },
                 },
               }).catch((joinError) => {
                 console.error("Failed to join as white:", joinError);
@@ -106,7 +116,10 @@ export function useGameRoom(gameId: string) {
                 presence: {
                   ...(gameData.presence ?? {}),
                   b: { online: true, lastActive: serverTimestamp() },
-                  w: gameData.presence?.w ?? { online: false, lastActive: null },
+                  w: gameData.presence?.w ?? {
+                    online: false,
+                    lastActive: null,
+                  },
                 },
               }).catch((joinError) => {
                 console.error("Failed to join as black:", joinError);
@@ -127,7 +140,10 @@ export function useGameRoom(gameId: string) {
       }
     );
 
-    const chatQuery = query(collection(db, `games/${gameId}/chat`), orderBy("timestamp", "asc"));
+    const chatQuery = query(
+      collection(db, `games/${gameId}/chat`),
+      orderBy("timestamp", "asc")
+    );
     const chatUnsubscribe = onSnapshot(
       chatQuery,
       (querySnapshot) => {
@@ -152,10 +168,11 @@ export function useGameRoom(gameId: string) {
       chatUnsubscribe();
     };
   }, [gameId, toast, user]);
-  
+
   const makeMove = useCallback(
     async (from: Square, to: Square) => {
-      if (!chess || !game || !playerColor || chess.turn() !== playerColor) return;
+      if (!chess || !game || !playerColor || chess.turn() !== playerColor)
+        return;
 
       try {
         const move = chess.move({ from, to, promotion: "q" });
@@ -176,7 +193,6 @@ export function useGameRoom(gameId: string) {
         } else if (chess.isStalemate()) newStatus = "stalemate";
         else if (chess.isDraw()) newStatus = "draw";
 
-        // Memperbarui dokumen permainan agar kedua pemain menerima keadaan terbaru
         await updateDoc(doc(db, "games", gameId), {
           fen: chess.fen(),
           pgn: chess.pgn(),
@@ -193,7 +209,6 @@ export function useGameRoom(gameId: string) {
         });
       } catch (e) {
         console.error("Failed to make move:", e);
-        // Revert local state if firebase update fails
         chess.undo();
         setGame(game);
         toast({

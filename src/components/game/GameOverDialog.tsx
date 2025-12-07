@@ -20,19 +20,30 @@ interface GameOverDialogProps {
   winner: Color | null;
 }
 
-export function GameOverDialog({ status, playerColor, winner }: GameOverDialogProps) {
+export function GameOverDialog({
+  status,
+  playerColor,
+  winner,
+}: GameOverDialogProps) {
   const router = useRouter();
   const isOpen =
-    status === "checkmate" || status === "stalemate" || status === "draw" || status === "resigned";
+    status === "checkmate" ||
+    status === "stalemate" ||
+    status === "draw" ||
+    status === "resigned";
 
   let title = "Game Over";
   let description = "";
 
   if (status === "checkmate") {
     title = "Checkmate!";
-    const didYouWin = (playerColor === "w" && winner === "w") || (playerColor === "b" && winner === "b");
+    const didYouWin =
+      (playerColor === "w" && winner === "w") ||
+      (playerColor === "b" && winner === "b");
     const winnerLabel = winner === "w" ? "White" : "Black";
-    description = `${winnerLabel} wins by checkmate. ${didYouWin ? "Congratulations!" : "Better luck next time."}`;
+    description = `${winnerLabel} wins by checkmate. ${
+      didYouWin ? "Congratulations!" : "Better luck next time."
+    }`;
   } else if (status === "stalemate") {
     title = "Stalemate";
     description = "The game is a draw by stalemate.";
@@ -45,7 +56,6 @@ export function GameOverDialog({ status, playerColor, winner }: GameOverDialogPr
     description = `${winnerLabel} wins by resignation.`;
   }
 
-  // Mengarahkan pemain kembali ke lobby setelah dialog ditutup
   const handleGoHome = () => {
     router.push("/");
   };

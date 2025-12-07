@@ -27,21 +27,29 @@ const PlayerInfo = ({
 }) => (
   <div className="flex flex-col items-center rounded-lg bg-muted/50 p-3 text-center">
     <h4 className="text-sm font-bold">{title}</h4>
-    <p className="w-full truncate text-xs text-muted-foreground" title={id ?? "..."}>
+    <p
+      className="w-full truncate text-xs text-muted-foreground"
+      title={id ?? "..."}
+    >
       {id ?? "Waiting..."}
     </p>
     <div className="mt-1 flex items-center gap-1 text-[11px] text-muted-foreground">
-      <Wifi className={`h-3 w-3 ${presence?.online ? "text-primary" : "text-muted-foreground"}`} />
+      <Wifi
+        className={`h-3 w-3 ${
+          presence?.online ? "text-primary" : "text-muted-foreground"
+        }`}
+      />
       <span>{presence?.online ? "Online" : "Offline"}</span>
     </div>
-    {isYou ? <div className="mt-1 text-xs font-bold text-primary">(You)</div> : null}
+    {isYou ? (
+      <div className="mt-1 text-xs font-bold text-primary">(You)</div>
+    ) : null}
   </div>
 );
 
 export function GameInfo({ game, chess, playerColor }: GameInfoProps) {
   const { status, players, winner, mode, presence } = game;
 
-  // Menghindari hitung ulang teks status yang mahal ketika tidak ada perubahan terkait
   const statusText = useMemo(() => {
     const turn = chess.turn();
     switch (status) {
@@ -65,18 +73,29 @@ export function GameInfo({ game, chess, playerColor }: GameInfoProps) {
     }
   }, [chess, status, winner]);
 
-  const statusColor = useMemo(() => (chess.inCheck() ? "text-accent" : "text-foreground"), [chess]);
+  const statusColor = useMemo(
+    () => (chess.inCheck() ? "text-accent" : "text-foreground"),
+    [chess]
+  );
 
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-xl">
-          {status === "in_progress" ? <Hourglass className="h-5 w-5" /> : <Crown className="h-5 w-5" />}
+          {status === "in_progress" ? (
+            <Hourglass className="h-5 w-5" />
+          ) : (
+            <Crown className="h-5 w-5" />
+          )}
           Game Status
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className={`rounded-lg bg-card p-3 text-center text-lg font-bold ${statusColor}`}>{statusText}</div>
+        <div
+          className={`rounded-lg bg-card p-3 text-center text-lg font-bold ${statusColor}`}
+        >
+          {statusText}
+        </div>
 
         <div className="grid grid-cols-2 gap-4">
           <PlayerInfo
