@@ -1,7 +1,5 @@
 "use client";
 
-import { useMemo } from "react";
-
 import { Chess, Color } from "chess.js";
 import { Crown, Hourglass, Wifi } from "lucide-react";
 
@@ -49,12 +47,13 @@ const PlayerInfo = ({
 
 export function GameInfo({ game, chess, playerColor }: GameInfoProps) {
   const { status, players, winner, mode, presence } = game;
+  const turn = chess.turn();
+  const inCheck = chess.inCheck();
 
-  const statusText = useMemo(() => {
-    const turn = chess.turn();
+  const statusText = (() => {
     switch (status) {
       case "waiting":
-        return "Waiting for opponent...";
+        return "Menunggu lawan...";
       case "checkmate":
         return `Checkmate! ${winner === "w" ? "White" : "Black"} wins.`;
       case "stalemate":
@@ -64,19 +63,16 @@ export function GameInfo({ game, chess, playerColor }: GameInfoProps) {
       case "resigned":
         return `${winner === "w" ? "White" : "Black"} wins by resignation.`;
       case "in_progress":
-        if (chess.inCheck()) {
+        if (inCheck) {
           return `${turn === "w" ? "White" : "Black"} is in Check!`;
         }
         return `${turn === "w" ? "White's" : "Black's"} turn`;
       default:
         return "Game in progress";
     }
-  }, [chess, status, winner]);
+  })();
 
-  const statusColor = useMemo(
-    () => (chess.inCheck() ? "text-accent" : "text-foreground"),
-    [chess]
-  );
+  const statusColor = inCheck ? "text-accent" : "text-foreground";
 
   return (
     <Card>

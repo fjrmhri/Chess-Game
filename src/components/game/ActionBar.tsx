@@ -43,14 +43,14 @@ export function ActionBar({
           {playerColor ? (
             <div className="flex items-center justify-between">
               <span className="font-medium">
-                {isYourTurn ? "Your turn" : "Opponent turn"}
+                {isYourTurn ? "Giliran Anda" : "Giliran Lawan"}
               </span>
               <span className="text-muted-foreground">
                 {playerColor === "w" ? "White" : "Black"}
               </span>
             </div>
           ) : (
-            <span className="text-muted-foreground">Assigning seat...</span>
+            <span className="text-muted-foreground">Mengatur tempat...</span>
           )}
         </div>
         <Separator />

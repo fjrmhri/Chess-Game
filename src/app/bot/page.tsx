@@ -14,12 +14,23 @@ import { useBotGame } from "@/hooks/useBotGame";
 
 export default function BotPage() {
   const [preferredColor, setPreferredColor] = useState<Color>("w");
-  const { game, chess, playerColor, setPlayerColor, makePlayerMove, resign, resetGame } = useBotGame({
+  const {
+    game,
+    chess,
+    playerColor,
+    setPlayerColor,
+    makePlayerMove,
+    resign,
+    resetGame,
+  } = useBotGame({
     playerColor: preferredColor,
   });
 
   const isPlayerTurn = chess.turn() === playerColor;
-  const isGameOver = useMemo(() => game.status !== "in_progress", [game.status]);
+  const isGameOver = useMemo(
+    () => game.status !== "in_progress",
+    [game.status]
+  );
 
   const handleColorSwitch = (color: Color) => {
     setPreferredColor(color);
@@ -34,7 +45,6 @@ export default function BotPage() {
           <CardHeader className="flex flex-row items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <p className="text-sm text-muted-foreground">Local Practice</p>
-              <CardTitle className="text-2xl">Play vs Bot</CardTitle>
             </div>
             <Button asChild variant="ghost" size="sm">
               <Link href="/">Back to lobby</Link>
@@ -50,8 +60,9 @@ export default function BotPage() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <p className="text-sm text-muted-foreground">
-                  Choose your side and keep playing without reloading the page. Bot play mirrors the multiplayer layout for a
-                  consistent feel.
+                  Pilih sisi Anda dan mainkan tanpa memuat ulang halaman.
+                  Bermain dengan bot akan meniru tata letak multiplayer untuk
+                  pengalaman yang konsisten.
                 </p>
                 <div className="flex gap-2">
                   <Button
@@ -91,7 +102,7 @@ export default function BotPage() {
               canMove={!isGameOver}
               onResign={resign}
               onReset={() => resetGame(playerColor)}
-              modeLabel="Bot match"
+              modeLabel="Pertandingan vs Bot"
               playerColor={playerColor}
               turn={chess.turn()}
               status={game.status}
@@ -100,7 +111,11 @@ export default function BotPage() {
         </main>
       </div>
 
-      <GameOverDialog status={game.status} playerColor={playerColor} winner={game.winner} />
+      <GameOverDialog
+        status={game.status}
+        playerColor={playerColor}
+        winner={game.winner}
+      />
     </div>
   );
 }

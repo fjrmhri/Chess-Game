@@ -21,6 +21,8 @@ export function Suggestion({ fen, pgn, disabled }: SuggestionProps) {
   const [error, setError] = useState<string | null>(null);
 
   const handleGetSuggestion = async () => {
+    if (loading || disabled) return;
+
     setLoading(true);
     setError(null);
     setSuggestion(null);

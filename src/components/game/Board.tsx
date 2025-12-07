@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { Chess } from "chess.js";
 import type { Color, Square as ChessSquare } from "chess.js";
 import { Square } from "./Square";
@@ -22,14 +22,18 @@ export function Board({
 }: BoardProps) {
   const [selectedPiece, setSelectedPiece] = useState<ChessSquare | null>(null);
 
-  const board = chess.board();
-  const boardOrientation =
-    playerColor === "b"
-      ? board
-          .slice()
-          .reverse()
-          .map((row) => row.slice().reverse())
-      : board;
+  const fen = chess.fen();
+  const board = useMemo(() => chess.board(), [chess, fen]);
+  const boardOrientation = useMemo(
+    () =>
+      playerColor === "b"
+        ? board
+            .slice()
+            .reverse()
+            .map((row) => row.slice().reverse())
+        : board,
+    [board, playerColor]
+  );
 
   const handleSquareClick = (square: ChessSquare) => {
     if (isGameOver || !isPlayerTurn) return;
@@ -71,11 +75,15 @@ export function Board({
     }` as ChessSquare;
   };
 
-  const possibleMoves = selectedPiece
-    ? chess
-        .moves({ square: selectedPiece, verbose: true })
-        .map((move) => move.to)
-    : [];
+  const possibleMoves = useMemo(
+    () =>
+      selectedPiece
+        ? chess
+            .moves({ square: selectedPiece, verbose: true })
+            .map((move) => move.to)
+        : [],
+    [chess, selectedPiece, fen]
+  );
 
   return (
     <div className="relative aspect-square w-full max-w-[520px] md:max-w-[560px] mx-auto select-none overflow-hidden rounded-xl shadow-lg bg-muted/30">
